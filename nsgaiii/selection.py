@@ -1,21 +1,35 @@
+#    This file is part of nsgaiii, a Python implementation of NSGA-III.
+#
+#    nsgaiii is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Lesser General Public License as
+#    published by the Free Software Foundation, either version 3 of
+#    the License, or (at your option) any later version.
+#
+#    nsgaiii is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    GNU Lesser General Public License for more details.
+#
+#    You should have received a copy of the GNU Lesser General Public
+#    License along with nsgaiii. If not, see <http://www.gnu.org/licenses/>.
+#
+#    by Luis Marti (IC/UFF) http://lmarti.com
+
 import copy,random
 import numpy as np
 from deap import tools
 
-# from deap import algorithms, base, benchmarks, tools, creator
-
 class ReferencePoint(list):
+    '''A reference point exists in objective space an has a set of individuals
+    associated to it.'''
     def __init__(self, *args):
         list.__init__(self, *args)
         self.associations_count = 0
         self.associations = []
 
 def generate_reference_points(num_objs, num_divisions_per_obj=4):
-    '''
-    Generates reference points for NSGA-III.
-    Based on the code of jMetal which is based on the code of
-    Tsung-Che Chiang
-    http://web.ntnu.edu.tw/~tcchiang/publications/nsga3cpp/nsga3cpp.htm
+    '''Generates reference points for NSGA-III selection. This code is based on
+    `jMetal NSGA-III implementation <https://github.com/jMetal/jMetal>`_.
     '''
     def gen_refs_recursive(work_point, num_objs, left, total, depth):
         if depth == num_objs - 1:
@@ -32,23 +46,27 @@ def generate_reference_points(num_objs, num_divisions_per_obj=4):
                               num_objs*num_divisions_per_obj, 0)
 
 def find_ideal_point(individuals):
+    'Finds the ideal point from a set individuals.'
     current_ideal = [np.infty] * len(individuals[0].fitness.values)
     for ind in individuals:
-        current_ideal = np.minimum(current_ideal, ind.fitness.values)
+        # Use wvalues to accomodate for maximization and minimization problems.
+        current_ideal = np.minimum(current_ideal, ind.fitness.wvalues * -1)
     return current_ideal
 
 def find_extreme_points(individuals):
-    return [sorted(individuals, key=lambda ind:ind.fitness.values[o])[-1]
+    'Finds the individuals with extreme values for each objective function.'
+    return [sorted(individuals, key=lambda ind:ind.fitness.wvalues[o] * -1)[-1]
             for o in range(len(individuals[0].fitness.values))]
 
-def has_duplicate_individuals(individuals):
-    for i in range(len(individuals)):
-        for j in range(i+1, len(individuals)):
-            if individuals[i].fitness.values == individuals[j].fitness.values:
-                return True
-    return False
-
 def construct_hyperplane(individuals, extreme_points):
+    'Calculates the axis intersects for a set of individuals and its extremes.'
+    def has_duplicate_individuals(individuals):
+        for i in range(len(individuals)):
+            for j in range(i+1, len(individuals)):
+                if individuals[i].fitness.values == individuals[j].fitness.values:
+                    return True
+        return False
+
     num_objs = len(individuals[0].fitness.values)
 
     if has_duplicate_individuals(extreme_points):
@@ -61,12 +79,16 @@ def construct_hyperplane(individuals, extreme_points):
     return intercepts
 
 def normalize_objective(individual, m, intercepts, ideal_point, epsilon=1e-20):
+    'Normalizes an objective.'
+    # Numeric trick present in JMetal implementation.
     if np.abs(intercepts[m]-ideal_point[m] > epsilon):
         return individual.fitness.values[m] / (intercepts[m]-ideal_point[m])
     else:
         return individual.fitness.values[m] / epsilon
 
 def normalize_objectives(individuals, intercepts, ideal_point):
+    '''Normalizes individuals using the hyperplane defined by the intercepts as
+    reference. Corresponds to Algorithm 2 of Deb & Jain (2014).'''
     num_objs = len(individuals[0].fitness.values)
 
     for ind in individuals:
@@ -81,7 +103,8 @@ def perpendicular_distance(direction, point):
     return np.sqrt(d)
 
 def associate(individuals, reference_points):
-    'Associates individuals to reference points and calculates niche number.'
+    '''Associates individuals to reference points and calculates niche number.
+    Corresponds to Algorithm 3 of Deb & Jain (2014).'''
     pareto_fronts = tools.sortLogNondominated(individuals, len(individuals))
     num_objs = len(individuals[0].fitness.values)
 
@@ -95,6 +118,8 @@ def associate(individuals, reference_points):
         best_rp.associations += [ind]
 
 def niching_select(individuals, k):
+    '''Secondary niched selection based on reference points. Corresponds to
+    steps 13-17 of Algorithm 1 and to Algorithm 4.'''
     if len(individuals) == k:
         return individuals
 
@@ -111,7 +136,7 @@ def niching_select(individuals, k):
 
     res = []
     while len(res) < k:
-        min_assoc_rp = min(reference_points, key=lambda rp: rp.associations_count)
+        min_assoc_rp = min(eference_points, key=lambda rp: rp.associations_count)
         min_assoc_rps = [rp for rp in reference_points if rp.associations_count == min_assoc_rp.associations_count]
         chosen_rp = min_assoc_rps[random.randint(0, len(min_assoc_rps)-1)]
 
@@ -133,9 +158,17 @@ def niching_select(individuals, k):
     return res
 
 def sel_nsga_iii(individuals, k):
+    '''Implements NSGA-III selection as described in
+    Deb, K., & Jain, H. (2014). An Evolutionary Many-Objective Optimization
+    Algorithm Using Reference-Point-Based Nondominated Sorting Approach,
+    Part I: Solving Problems With BoxConstraints. IEEE Transactions on
+    Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.'''
+    assert len(individuals) <= k
+
     if len(individuals)==k:
         return individuals
 
+    # Algorithm 1 steps 4--8
     fronts = tools.sortLogNondominated(individuals, len(individuals))
 
     limit = 0
@@ -145,11 +178,14 @@ def sel_nsga_iii(individuals, k):
         if len(res) > k:
             limit = f
             break
-
+    # Algorithm 1 steps
     selection = []
     if limit > 0:
         for f in range(limit):
             selection += fronts[f]
 
+    # complete selected inividuals using the referece point based approach
     selection += niching_select(fronts[limit], k - len(selection))
     return selection
+
+__all__ = ["sel_nsga_iii"]

@@ -1,20 +1,19 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = 'pysnsgaiii',
-    version = '0.0.1',
+    name = 'nsgaiii',
+    version = '0.1.0',
     author = 'Luis Martí',
-    author_email = 'lmarti@github.com',
+    author_email = 'lmarti@ic.uff.bf',
     description = ('An implementation of the NSGA-III algorithm in Python'),
-    license = 'BSD',
-    keywords = 'nsga moea evolutionary genetic multi-objective optimization emoa emo',
-    url = 'http://pynsgaiii.github.com',
+    license = 'LGNU',
+    keywords = ['evolutionary algorithms','genetic algorithms','ga','nsga','moea', 'multi-objective optimization','emoa', 'emo', 'nsga-iii'],
+    url = 'http://nsgaiii.github.com',
     packages = find_packages(),
-    package_data={,
     classifiers = [
-      'Development Status :: 4 - Beta',
+      'Development Status :: 3 - Alpha',
       'Intended Audience :: Science/Research',
-      'License :: OSI Approved :: BSD License',
+      'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
       'Operating System :: OS Independent',
       'Programming Language :: Python',
       'Programming Language :: Python :: 3',
@@ -22,7 +21,7 @@ setup(
     ],
     include_package_data = False,
     install_requires = [
-      'numpy',
+      'numpy','deap'
     ],
     tests_require = [],
     extras_require = {
