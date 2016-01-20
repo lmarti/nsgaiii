@@ -8,7 +8,7 @@ setup(
     description = ('An implementation of the NSGA-III algorithm in Python'),
     license = 'LGNU',
     keywords = ['evolutionary algorithms','genetic algorithms','ga','nsga','moea', 'multi-objective optimization','emoa', 'emo', 'nsga-iii'],
-    url = 'http://nsgaiii.github.com',
+    url = 'http://lmarti.github.io/nsgaiii/',
     packages = find_packages(),
     classifiers = [
       'Development Status :: 3 - Alpha',
