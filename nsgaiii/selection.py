@@ -50,7 +50,8 @@ def find_ideal_point(individuals):
     current_ideal = [np.infty] * len(individuals[0].fitness.values)
     for ind in individuals:
         # Use wvalues to accomodate for maximization and minimization problems.
-        current_ideal = np.minimum(current_ideal, ind.fitness.wvalues * -1)
+        current_ideal = np.minimum(current_ideal,
+                                   np.multiply(ind.fitness.wvalues, -1))
     return current_ideal
 
 def find_extreme_points(individuals):
@@ -136,7 +137,7 @@ def niching_select(individuals, k):
 
     res = []
     while len(res) < k:
-        min_assoc_rp = min(eference_points, key=lambda rp: rp.associations_count)
+        min_assoc_rp = min(reference_points, key=lambda rp: rp.associations_count)
         min_assoc_rps = [rp for rp in reference_points if rp.associations_count == min_assoc_rp.associations_count]
         chosen_rp = min_assoc_rps[random.randint(0, len(min_assoc_rps)-1)]
 
@@ -161,9 +162,10 @@ def sel_nsga_iii(individuals, k):
     '''Implements NSGA-III selection as described in
     Deb, K., & Jain, H. (2014). An Evolutionary Many-Objective Optimization
     Algorithm Using Reference-Point-Based Nondominated Sorting Approach,
-    Part I: Solving Problems With BoxConstraints. IEEE Transactions on
-    Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.'''
-    assert len(individuals) <= k
+    Part I: Solving Problems With Box Constraints. IEEE Transactions on
+    Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.
+    '''
+    assert len(individuals) >= k
 
     if len(individuals)==k:
         return individuals
