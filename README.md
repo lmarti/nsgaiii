@@ -8,7 +8,7 @@
 
 ## Installation
 
-So far, the only form of installation is to checkout the project from GitHub,
+So far, the only form of installation is to clone the project from GitHub,
 
 ```bash
 git clone https://github.com/lmarti/nsgaiii.git
