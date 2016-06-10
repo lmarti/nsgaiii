@@ -15,6 +15,7 @@
 #
 #    by Luis Marti (IC/UFF) http://lmarti.com
 
+from __future__ import division # making it work with Python 2.x
 import copy,random
 import numpy as np
 from deap import tools
