@@ -6,6 +6,8 @@
 
 `nsgaiii` can be used with -as has been developed relying on- the [DEAP module](https://www.github.com/DEAP/deap).
 
+This code is highly experimental. Contributions and bug fixes are welcome.
+
 ## Installation
 
 So far, the only form of installation is to checkout the project from GitHub,
@@ -22,4 +24,4 @@ python setup.py install
 
 ## Demonstration
 
-I have prepared a sample [Jupyter/IPython notebook](http://nbviewer.jupyter.org/github/lmarti/nsgaiii/blob/master/NSGA-III%20in%20Python.ipynb) that illustrates the use of the module.
+I have prepared a sample [Jupyter/IPython notebook](http://nbviewer.jupyter.org/github/lmarti/nsgaiii/blob/master/NSGA-III%20in%20Python.ipynb) that illustrates NSGA-III and the use of the module.
