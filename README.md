@@ -8,6 +8,12 @@
 
 This code is highly experimental. Contributions and bug fixes are welcome.
 
+> **Notice:** This code has been integrated in [DEAP](https://github.com/DEAP/deap) as their function [`selNSGA3`](https://github.com/DEAP/deap/blob/master/deap/tools/emo.py#L492). I recommend you use that implementation as it is actively maintained.
+
+## Demonstration
+
+I have prepared a sample [Jupyter/IPython notebook](http://nbviewer.jupyter.org/github/lmarti/nsgaiii/blob/master/NSGA-III%20in%20Python.ipynb) that illustrates NSGA-III and the use of the module.
+
 ## Installation
 
 So far, the only form of installation is to clone the project from GitHub,
@@ -21,7 +27,3 @@ git clone https://github.com/lmarti/nsgaiii.git
 ```bash
 python setup.py install
 ```
-
-## Demonstration
-
-I have prepared a sample [Jupyter/IPython notebook](http://nbviewer.jupyter.org/github/lmarti/nsgaiii/blob/master/NSGA-III%20in%20Python.ipynb) that illustrates NSGA-III and the use of the module.
