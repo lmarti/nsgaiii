@@ -13,11 +13,9 @@
 #    You should have received a copy of the GNU Lesser General Public
 #    License along with nsgaiii. If not, see <http://www.gnu.org/licenses/>.
 #
-#    by Luis Marti (IC/UFF) http://lmarti.com
+#    by Luis Martí http://lmarti.com
 
 """Module :mod:`~nsgaiii` implements the selection algorithm of NSGA-III as
 described in:
-Deb, K., & Jain, H. (2014). An Evolutionary Many-Objective Optimization Algorithm Using Reference-Point-Based Nondominated Sorting Approach, Part I: Solving Problems With Box Constraints. IEEE Transactions on Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.
+Deb, K., & Jain, H. (2014). An Evolutionary Many-Objective Optimization Algorithm Using Reference-Point-Based Nondominated Sorting Approach, Part I: Solving Problems With Box Constraints. IEEE Transactions on Evolutionary Computation, 18(4), 577-601. doi:10.1109/TEVC.2013.2281535.
 """
-
-from .selection import *
