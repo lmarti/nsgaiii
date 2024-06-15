@@ -1,4 +1,4 @@
-# `nsgaiii`: An implementation of NSGA-III in Python
+# `nsgaiii`: Understanding the Implementation of NSGA-III in Python
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lmarti/nsgaiii/blob/master/NSGA-III%20in%20Python.ipynb)
 [![nbviewer](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/lmarti/nsgaiii/blob/master/NSGA-III%20in%20Python.ipynb)
